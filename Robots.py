@@ -372,7 +372,7 @@ class BattleTech():
 
 testBT1 = BattleTech(
     tech_type='GLADIATOR',
-    nickname='Penoblok',
+    nickname='Onigiri',
     years_old=3,
     armor_volume=700,
     stamina_capacity=599,
