@@ -1,4 +1,5 @@
 from Weaponry import *
+from os import urandom as os_urandom
 
 
 class BattleTech():
@@ -278,15 +279,21 @@ class BattleTech():
         fireSuccessfulFlag = False
 
         def fireSuccessful(
+                weaponDidntFail = 1,
                 currNickname=self.get_nickname(),
                 currWeapon=chosen_weapon.get_name(),
                 damage=damage,
                 damageType=damageType
         ):
-            print(f'{currNickname} использует {currWeapon}!')
-            print(f'И собирается нанести {damage} пунктов <{damageType}> урона!')
+            if weaponDidntFail:
+                print(f'{currNickname} использует {currWeapon}!')
+                print(f'И собирается нанести {damage} пунктов <{damageType}> урона!')
 
-            return True
+                return True
+            else:
+                print(f'{currNickname} пытается использовать {currWeapon}!')
+                print('Орудие не сработало!')
+                return False
 
         damageAmmoTypesDict = {
             'phisical': [self.get_bullets_num(), 'шт.'],
@@ -294,8 +301,21 @@ class BattleTech():
             'thermal': [self.get_energy_capacity(), 'пунктов энергии'],
             'energetic': [self.get_energy_capacity(), 'пунктов энергии']
         }
+
+        currWeaponFailProbability = round(chosen_weapon.get_years_old() * 0.007, 3)
+        randomProbability = round(int.from_bytes(os_urandom(8), byteorder="big") / ((1 << 64) - 1), 5)
+        print(f'Weapon fail probs: {currWeaponFailProbability} '
+              f'Random probs got now: {randomProbability}')
+
+        # Оружие "закусило" или не сработало
+        if randomProbability <= currWeaponFailProbability:
+            damage = 0  # обнуляем наносимый урон
+            fireSuccessfulFlag = fireSuccessful(weaponDidntFail=0)
+            return '', 0
+
         # в зависимости от типа урона, который наносит орудие убавляется определенный боезапас
-        if damageType == 'phisical' and self.get_bullets_num() - phisicalSpendAmmo >= 0:
+
+        elif damageType == 'phisical' and self.get_bullets_num() - phisicalSpendAmmo >= 0:
             self.__bullets_num -= phisicalSpendAmmo
             fireSuccessfulFlag = fireSuccessful()
         elif damageType == 'explosive' and self.get_missles_num() - explosiveSpendAmmo >= 0:
