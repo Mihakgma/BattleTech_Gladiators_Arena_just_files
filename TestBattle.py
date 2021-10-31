@@ -51,6 +51,8 @@ class Battle1vs1():
 
         # здесь будет код для типа уклонения у каждого БТ!
         ###
+        # прописать метод возвращающий battleTechDamageReduction для обоих BT!
+        # get_battleTechDamageReduction()
         # на сколько пунктов снижается урон для 1-ого BattleTech-a
         battleTech1DamageReduction = 0
         # на сколько пунктов снижается урон для 2-ого BattleTech-a
@@ -64,36 +66,47 @@ class Battle1vs1():
         battleTech2Nick = battleTech2.get_nickname()
 
         if battleTech1Defence[0]:
-            # Пришло True
+            # Пришло True из метода защиты класса BT
+            # Вызов метода расчета объема снижения урона
             BT1DefenceType = battleTech1Defence[1]
-            if BT1DefenceType == 'move' and damageTypeBT2 == 'explosive':
-                speedBT1 = battleTech1.get_speed()
-                print(f'{battleTech1Nick} пытается уколниться от ракетного залпа на скорости {speedBT1}')
-                battleTech1DamageReduction = speedBT1 * 0.35
+            battleTech1DamageReduction=self.get_battleTechDamageReduction(
+                BTdefender=battleTech1,
+                BTdefenderDefenceType=BT1DefenceType,
+                BTattackerDamageType=damageTypeBT2,
+                BTdefenderNickname=battleTech1Nick,
+                BTattackerNickname=battleTech2Nick,
+                damagePointsGot=battleTech2Attack[1]
+            )
 
 
         if battleTech2Defence[0]:
             # Пришло True
             BT2DefenceType = battleTech2Defence[1]
-            if BT2DefenceType == 'move' and damageTypeBT1 == 'explosive':
-                speedBT2 = battleTech2.get_speed()
-                print(f'{battleTech2Nick} пытается уколниться от ракетного залпа на скорости {speedBT2}')
-                battleTech2DamageReduction = speedBT2 * 0.35
+            battleTech2DamageReduction = self.get_battleTechDamageReduction(
+                BTdefender=battleTech2,
+                BTdefenderDefenceType=BT2DefenceType,
+                BTattackerDamageType=damageTypeBT1,
+                BTdefenderNickname=battleTech2Nick,
+                BTattackerNickname=battleTech1Nick,
+                damagePointsGot=battleTech1Attack[1]
+            )
 
         ###
 
         # обмен уроном в броню
         # thermal damage проходит сквозь физическую броню
+        battleTech2DamageGot = round(battleTech1Attack[1] - battleTech2DamageReduction, 2)
+        battleTech1DamageGot = round(battleTech2Attack[1] - battleTech1DamageReduction, 2)
 
         if damageTypeBT1 == 'thermal':
-            battleTech2.getStaminaDamage(battleTech1Attack[1] - battleTech2DamageReduction)
+            battleTech2.getStaminaDamage(battleTech2DamageGot)
         else:
-            battleTech2.getArmorDamage(battleTech1Attack[1] - battleTech2DamageReduction)
+            battleTech2.getArmorDamage(battleTech2DamageGot)
 
         if damageTypeBT2 == 'thermal':
-            battleTech1.getStaminaDamage(battleTech2Attack[1] - battleTech1DamageReduction)
+            battleTech1.getStaminaDamage(battleTech1DamageGot)
         else:
-            battleTech1.getArmorDamage(battleTech2Attack[1] - battleTech1DamageReduction)
+            battleTech1.getArmorDamage(battleTech1DamageGot)
 
         # проверяем стамину роботов и определяем окончен бой или нет?
         battleTech1Stamina = battleTech1.get_stamina_capacity()
@@ -117,6 +130,90 @@ class Battle1vs1():
             return False
         else:
             return True
+
+    def get_battleTechDamageReduction(
+            self,
+            BTdefender: object,
+            #BTattacker: object,
+            BTdefenderDefenceType: str,
+            BTattackerDamageType: str,
+            BTdefenderNickname: str,
+            BTattackerNickname: str,
+            damagePointsGot: int
+    ):
+        """"
+        BTdefender - BT that gets damage (damage receipient)
+        BTattacker - BT that make damage (damage donor)
+
+        This method gets as input:
+        1) BTdefender's type of defence
+        2) BTattacker's type of damage
+        3) BTdefender's nickname
+        4) BTattacker's nickname
+
+        This method produce an output:
+        BTdefenderDamageReduction - int (in range 0:999)
+
+        var BTdefenderDamageReduction cannot be a negative int (less than 0) - ???
+
+        1) dodgeCoeff - constant var coeff of reduction of damage in a case of:
+        BTattacker's type of damage is 'explosive'
+        & (logical expression)
+        BTdefender's type of defence is 'move'
+
+        etc on the same template the other defence-damage pairs!
+
+        2) energyShieldEnergeticDamageResistCoeff
+        3) energyShieldThermalResistCoeff
+        4) physicalResistCoeff
+
+
+        """
+        dodgeCoeff = 0.45
+        energyShieldEnergeticDamageResistCoeff = 0.83
+        energyShieldThermalResistCoeff = 0.55
+        physicalResistCoeff = 0.69
+
+        BTdefenderDamageReduction = 0
+
+        if BTdefenderDefenceType == 'move' and BTattackerDamageType == 'explosive':
+            # need get defender's speed
+            speedBTdefender = BTdefender.get_speed()
+            print(f'{BTdefenderNickname} пытается уколниться от '
+                  f'ракетного залпа {BTattackerNickname} на скорости {speedBTdefender} км/ч')
+            BTdefenderDamageReduction = speedBTdefender * dodgeCoeff
+
+        elif BTdefenderDefenceType == 'energy shield' and BTattackerDamageType == 'energetic':
+            # successful defence!
+            BTdefenderDamageReduction = damagePointsGot * energyShieldEnergeticDamageResistCoeff
+            print(f'{BTdefenderNickname} успешно активировал энергетический щит '
+                  f'против <{BTattackerDamageType}> атаки {BTattackerNickname},'
+                  f' снизив урон на {BTdefenderDamageReduction} пунктов!')
+
+        elif BTdefenderDefenceType == 'energy shield' and BTattackerDamageType == 'thermal':
+            # successful defence!
+            BTdefenderDamageReduction = damagePointsGot * energyShieldThermalResistCoeff
+            print(f'{BTdefenderNickname} успешно активировал энергетический щит '
+                  f'против <{BTattackerDamageType}> атаки {BTattackerNickname}, '
+                  f' снизив урон на {BTdefenderDamageReduction} пунктов!')
+
+
+        elif BTdefenderDefenceType == 'phisical shield' and BTattackerDamageType == 'phisical':
+            # successful defence!
+            BTdefenderDamageReduction = damagePointsGot * physicalResistCoeff
+            print(f'{BTdefenderNickname} успешно активировал физический щит '
+                  f'против <{BTattackerDamageType}> атаки {BTattackerNickname}, '
+                  f' снизив урон на {BTdefenderDamageReduction} пунктов!')
+
+        else:
+            print(f'{BTdefenderNickname} не удалось выбрать эффективную защиту '
+                  f'против атаки {BTattackerNickname} :-(')
+
+
+
+        return BTdefenderDamageReduction
+
+
 
     def showBTDetails(self):
         battleTech1 = self.get_battleTech1()

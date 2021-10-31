@@ -1,5 +1,3 @@
-# This is a sample Python script.
-
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 from Robots import *
@@ -8,13 +6,13 @@ from time import sleep
 #from Armory import *
 
 def testBattle1():
-    battleTest1 = Battle1vs1(testBT1, testBT3)
+    battleTest1 = Battle1vs1(testBT2, testBT3)
     roundNum = 0
     while battleTest1.startNewRound():
         print('###')
         print()
         roundNum += 1
-        sleep(0.75)
+        #sleep(0.35) # задержка между раундами (опционально)
         print(f'ROUND {roundNum}')
         print('###')
         print()

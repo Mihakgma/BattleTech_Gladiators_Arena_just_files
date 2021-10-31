@@ -62,15 +62,15 @@ machinegun1 = Weapon(
     name='Крупнокалиберный пулемет',
     years_old=1,
     endurance_volume=100,
-    damage_points=150
+    damage_points=15
 )
 
 cannon1 = Weapon(
-    damage_type='explosive',
+    damage_type='phisical',
     name='Гаубица',
     years_old=1,
     endurance_volume=100,
-    damage_points=230
+    damage_points=17
 )
 
 lazer1 = Weapon(
@@ -78,7 +78,7 @@ lazer1 = Weapon(
     name='Плазменный бластер',
     years_old=1,
     endurance_volume=100,
-    damage_points=210
+    damage_points=21
 )
 
 rocketLauncher1 = Weapon(
@@ -86,7 +86,7 @@ rocketLauncher1 = Weapon(
     name='Ракетная установка',
     years_old=1,
     endurance_volume=100,
-    damage_points=290
+    damage_points=29
 )
 
 rocketLauncher2 = Weapon(
@@ -94,7 +94,7 @@ rocketLauncher2 = Weapon(
     name='Толстяк',
     years_old=1,
     endurance_volume=100,
-    damage_points=350
+    damage_points=75
 )
 
 spitfire1 = Weapon(
@@ -102,7 +102,7 @@ spitfire1 = Weapon(
     name='Огнемет',
     years_old=1,
     endurance_volume=100,
-    damage_points=410
+    damage_points=41
 )
 
 machinegun2 = Weapon(
@@ -110,7 +110,7 @@ machinegun2 = Weapon(
     name='Станковый пулемет',
     years_old=1,
     endurance_volume=100,
-    damage_points=110
+    damage_points=11
 )
 
 lazer2 = Weapon(
@@ -118,5 +118,5 @@ lazer2 = Weapon(
     name='Промышленная резка',
     years_old=1,
     endurance_volume=100,
-    damage_points=330
+    damage_points=33
 )

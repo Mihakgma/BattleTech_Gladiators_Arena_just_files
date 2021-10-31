@@ -93,8 +93,8 @@ class BattleTech():
         self.__nickname = nickname
         self.__years_old = years_old
         self.__armor_volume = armor_volume
-        self.__stamina_capacity = stamina_capacity
-        self.__energy_capacity = energy_capacity
+        self.__stamina_capacity = round(stamina_capacity, 2)
+        self.__energy_capacity = round(energy_capacity, 2)
         self.__missles_num = missles_num
         self.__bullets_num = bullets_num
         self.__speed = speed
@@ -165,10 +165,10 @@ class BattleTech():
         return self.__years_old
 
     def get_armor_volume(self):
-        return self.__armor_volume
+        return round(self.__armor_volume, 2)
 
     def get_stamina_capacity(self):
-        return self.__stamina_capacity
+        return round(self.__stamina_capacity, 2)
 
     def get_energy_capacity(self):
         return self.__energy_capacity
@@ -271,7 +271,7 @@ class BattleTech():
         damageType = chosen_weapon.get_damage_type()
         damage = chosen_weapon.get_damage_points()
 
-        phisicalSpendAmmo = 10
+        phisicalSpendAmmo = 3
         explosiveSpendAmmo = 1
         thermalSpendAmmo = 1
         energeticSpendAmmo = 1
@@ -284,12 +284,12 @@ class BattleTech():
                 damageType=damageType
         ):
             print(f'{currNickname} использует {currWeapon}!')
-            print(f'Наносит {damage} пунктов <{damageType}> урона!')
+            print(f'И собирается нанести {damage} пунктов <{damageType}> урона!')
 
             return True
 
         damageAmmoTypesDict = {
-            'phisical': [self.get_bullets_num(), 'пуль'],
+            'phisical': [self.get_bullets_num(), 'шт.'],
             'explosive': [self.get_missles_num(), 'ракет'],
             'thermal': [self.get_energy_capacity(), 'пунктов энергии'],
             'energetic': [self.get_energy_capacity(), 'пунктов энергии']
@@ -364,7 +364,8 @@ class BattleTech():
 
     def kill_self(self):
         """
-        Удалить объект класса
+        Удалить объект класса (?)
+        поражение данного BattleTech-а
         """
         # del self
         print('BOOM!')
@@ -372,7 +373,7 @@ class BattleTech():
 
 testBT1 = BattleTech(
     tech_type='GLADIATOR',
-    nickname='Onigiri',
+    nickname='Stix',
     years_old=3,
     armor_volume=700,
     stamina_capacity=599,
@@ -388,13 +389,13 @@ testBT1 = BattleTech(
 
 testBT2 = BattleTech(
     tech_type='GLADIATOR',
-    nickname='Bull',
+    nickname='Zeus',
     years_old=3,
     armor_volume=900,
-    stamina_capacity=399,
+    stamina_capacity=499,
     energy_capacity=30,
-    missles_num=30,
-    bullets_num=30,
+    missles_num=50,
+    bullets_num=39,
     speed=15,
     armor_slots_num=3,
     weapon_slots_num=5,
@@ -411,7 +412,7 @@ testBT3 = BattleTech(
     energy_capacity=70,
     missles_num=10,
     bullets_num=30,
-    speed=30,
+    speed=45,
     armor_slots_num=3,
     weapon_slots_num=4,
     armor_equipped_lst=['', '', ''],
