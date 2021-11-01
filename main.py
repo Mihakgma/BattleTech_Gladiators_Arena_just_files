@@ -6,7 +6,7 @@ from time import sleep
 #from Armory import *
 
 def testBattle1():
-    battleTest1 = Battle1vs1(testBT2, testBT3)
+    battleTest1 = Battle1vs1(testBT3, testBT4)
     roundNum = 0
     while battleTest1.startNewRound():
         print('###')

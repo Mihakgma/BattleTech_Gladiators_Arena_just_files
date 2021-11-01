@@ -65,10 +65,17 @@ class Battle1vs1():
         battleTech1Nick = battleTech1.get_nickname()
         battleTech2Nick = battleTech2.get_nickname()
 
+        def printDefenceType(
+                BTNickname,
+                BTDefenceType
+        ):
+            print(f'{BTNickname} выбрал защиту с помощью {BTDefenceType}!')
+
         if battleTech1Defence[0]:
             # Пришло True из метода защиты класса BT
             # Вызов метода расчета объема снижения урона
             BT1DefenceType = battleTech1Defence[1]
+            printDefenceType(battleTech1Nick, BT1DefenceType)
             battleTech1DamageReduction=self.get_battleTechDamageReduction(
                 BTdefender=battleTech1,
                 BTdefenderDefenceType=BT1DefenceType,
@@ -82,6 +89,7 @@ class Battle1vs1():
         if battleTech2Defence[0]:
             # Пришло True
             BT2DefenceType = battleTech2Defence[1]
+            printDefenceType(battleTech2Nick, BT2DefenceType)
             battleTech2DamageReduction = self.get_battleTechDamageReduction(
                 BTdefender=battleTech2,
                 BTdefenderDefenceType=BT2DefenceType,
