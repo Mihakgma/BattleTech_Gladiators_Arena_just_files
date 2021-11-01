@@ -54,85 +54,9 @@ class Weapon():
     def get_damage_points(self):
         return self.__damage_points
 
-
-# ПРИМЕРЫ ОРУДИЙ
-
-machinegun1 = Weapon(
-    damage_type='phisical',
-    name='Крупнокалиберный пулемет',
-    years_old=11,
-    endurance_volume=100,
-    damage_points=25
-)
-
-cannon1 = Weapon(
-    damage_type='phisical',
-    name='Гаубица',
-    years_old=33,
-    endurance_volume=100,
-    damage_points=99
-)
-
-lazer1 = Weapon(
-    damage_type='energetic',
-    name='Плазменный бластер',
-    years_old=57,
-    endurance_volume=100,
-    damage_points=59
-)
-
-rocketLauncher1 = Weapon(
-    damage_type='explosive',
-    name='Ракетная установка',
-    years_old=19,
-    endurance_volume=100,
-    damage_points=39
-)
-
-rocketLauncher2 = Weapon(
-    damage_type='explosive',
-    name='Толстяк',
-    years_old=111,
-    endurance_volume=100,
-    damage_points=95
-)
-
-spitfire1 = Weapon(
-    damage_type='thermal',
-    name='Огнемет',
-    years_old=79,
-    endurance_volume=100,
-    damage_points=71
-)
-
-machinegun2 = Weapon(
-    damage_type='phisical',
-    name='Станковый пулемет',
-    years_old=5,
-    endurance_volume=100,
-    damage_points=11
-)
-
-lazer2 = Weapon(
-    damage_type='energetic',
-    name='Промышленная резка',
-    years_old=89,
-    endurance_volume=100,
-    damage_points=130
-)
-
-rocketLauncher3 = Weapon(
-    damage_type='explosive',
-    name='Катюша',
-    years_old=41,
-    endurance_volume=100,
-    damage_points=63
-)
-
-lazer3 = Weapon(
-    damage_type='energetic',
-    name='Контрактный бластер',
-    years_old=19,
-    endurance_volume=100,
-    damage_points=130
-)
+    def getAllAttributes(self):
+        print(f'Тип урона: <{self.get_damage_type()}>')
+        print(f'Наименование орудия: {self.get_name()}')
+        print(f'Возраст(лет): {self.get_years_old()}')
+        print(f'Прочность (ед.): {self.get_endurance_volume()}')
+        print(f'Наносимый урон(пунктов): {self.get_damage_points()}')
