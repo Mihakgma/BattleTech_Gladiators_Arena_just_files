@@ -153,6 +153,26 @@ class BattleTech():
     def set_weapon_equipped_lst(self, weapon_equipped_lst):
         self.__weapon_equipped_lst = weapon_equipped_lst
 
+    def refreshStats(
+            self,
+            armor_volume,
+            stamina_capacity,
+            energy_capacity,
+            missles_num,
+            bullets_num
+            #speed,
+            #armor_equipped_lst,
+            #weapon_equipped_lst
+                     ):
+        self.__armor_volume = armor_volume
+        self.__stamina_capacity = stamina_capacity
+        self.__energy_capacity = energy_capacity
+        self.__missles_num = missles_num
+        self.__bullets_num = bullets_num
+        #self.__speed = speed
+        #self.__armor_equipped_lst = armor_equipped_lst
+        #self.__weapon_equipped_lst = weapon_equipped_lst
+
     # получить атрибуты
     def get_nickname(self):
         return self.__nickname
