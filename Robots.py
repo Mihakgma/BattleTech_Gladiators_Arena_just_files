@@ -16,7 +16,10 @@ class BattleTech():
                  armor_slots_num,
                  weapon_slots_num,
                  armor_equipped_lst,
-                 weapon_equipped_lst
+                 weapon_equipped_lst,
+                 inactiveRounds=0,
+                 isVisibleNow=1,
+                 superabilityToUseNum=1
                  ):
         """
         TECHTYPES:
@@ -101,6 +104,9 @@ class BattleTech():
         self.__weapon_slots_num = weapon_slots_num
         self.__armor_equipped_lst = armor_equipped_lst
         self.__weapon_equipped_lst = weapon_equipped_lst
+        self.__inactiveRounds = inactiveRounds
+        self.__isVisibleNow = isVisibleNow
+        self.__superabilityToUseNum = superabilityToUseNum
 
         # проверка на соответсвие длины листов брони и орудий
         if armor_slots_num < len(armor_equipped_lst):
@@ -153,25 +159,37 @@ class BattleTech():
     def set_weapon_equipped_lst(self, weapon_equipped_lst):
         self.__weapon_equipped_lst = weapon_equipped_lst
 
+    def set_inactiveRounds(self, inactiveRounds):
+        self.__inactiveRounds = inactiveRounds
+
+    def set_isVisibleNow(self, isVisibleNow):
+        self.__isVisibleNow = isVisibleNow
+
+    def set_superabilityToUseNum(self, superabilityToUseNum):
+        self.__superabilityToUseNum = superabilityToUseNum
+
     def refreshStats(
             self,
             armor_volume,
             stamina_capacity,
             energy_capacity,
             missles_num,
-            bullets_num
-            #speed,
-            #armor_equipped_lst,
-            #weapon_equipped_lst
+            bullets_num,
+            speed,
+            inactiveRounds=0,
+            isVisibleNow=1,
+            superabilityToUseNum=1
                      ):
         self.__armor_volume = armor_volume
         self.__stamina_capacity = stamina_capacity
         self.__energy_capacity = energy_capacity
         self.__missles_num = missles_num
         self.__bullets_num = bullets_num
-        #self.__speed = speed
-        #self.__armor_equipped_lst = armor_equipped_lst
-        #self.__weapon_equipped_lst = weapon_equipped_lst
+        self.__speed = speed
+        self.__inactiveRounds = inactiveRounds
+        self.__isVisibleNow = isVisibleNow
+        self.__superabilityToUseNum = superabilityToUseNum
+
 
     # получить атрибуты
     def get_nickname(self):
@@ -213,6 +231,15 @@ class BattleTech():
     def get_weapon_equipped_lst(self):
         return self.__weapon_equipped_lst
 
+    def get_inactiveRounds(self):
+        return self.__inactiveRounds
+
+    def get_isVisibleNow(self):
+        return self.__isVisibleNow
+
+    def get_superabilityToUseNum(self):
+        return self.__superabilityToUseNum
+
     # print all atributes by doing 1 method
     def showAllAttrValues(self):
         """
@@ -220,6 +247,7 @@ class BattleTech():
         of all attributes of the current
         BattleTech one
         """
+        noYesLst = ['Нет', 'Да']
         print('Ник: ', self.get_nickname())
         print('Выбранный тип BattleTech: ', self.get_tech_type())
         print('Возраст: ', self.get_years_old(), 'лет')
@@ -233,6 +261,10 @@ class BattleTech():
         print('Слотов оружия BattleTech: ', self.get_weapon_slots_num(), 'штук')
         print(f'Экипирована броня: {self.get_armor_equipped_lst()}')
         print(f'Экипировано оружие: {[i.get_name() for i in self.get_weapon_equipped_lst()]}')
+        print(f'BattleTech пропускает ход следующие {self.get_inactiveRounds()} раундов!')
+        print(f'Виден противником: {noYesLst[self.get_isVisibleNow()]}')
+        print(f'Может использовать суперспособность {self.get_superabilityToUseNum()} раз')
+
 
     # БОЕВКА
     # МЕТОДЫ ЗАЩИТЫ
@@ -241,9 +273,14 @@ class BattleTech():
         Передвигает робота (уклонение)
         эффективно от ракетного залпа
         """
+        passRounds = self.get_inactiveRounds()
         currentSpeed = self.get_speed()
         currentNickname = self.get_nickname()
-        if currentSpeed > 0:
+        if passRounds > 0: # пропуск раунда
+            print(f'{currentNickname} не может стронуться с места!')
+            print('Reason: pass round!')
+            return False, 'move'
+        elif currentSpeed > 0:
             #print(f'{currentNickname} применяет уклонение на скорости {currentSpeed}')
             return True, 'move'
         else:
@@ -258,7 +295,13 @@ class BattleTech():
         Эффективен против лазеров (?) и Огнеметов.
         может быть применен только если у BattleTech-а осталась энергия
         """
-        if self.get_energy_capacity() > 0:
+        passRounds = self.get_inactiveRounds()
+
+        if passRounds > 0: # пропуск раунда
+            print(f'{self.get_nickname()} не может активировать энергетический щит!')
+            print('Reason: pass round!')
+            return False, 'energy shield'
+        elif self.get_energy_capacity() > 0:
             #print(f'{self.get_nickname()} активирует энергетический щит!')
             return True, 'energy shield'
         else:
@@ -272,7 +315,12 @@ class BattleTech():
         может быть применен только если у BattleTech-а осталась броня
         :return:
         """
-        if self.get_armor_volume() > 0:
+        passRounds = self.get_inactiveRounds()
+        if passRounds > 0: # пропуск раунда
+            print(f'{self.get_nickname()} не может активировать физический щит!')
+            print('Reason: pass round!')
+            return False, 'phisical shield'
+        elif self.get_armor_volume() > 0:
             #print(f'{self.get_nickname()} активирует физический щит!')
             return True, 'phisical shield'
         else:
@@ -287,6 +335,13 @@ class BattleTech():
         нанесения урона противнику
         возвращает тип и объем урона в виде tuple
         """
+
+        passRounds = self.get_inactiveRounds()
+        if passRounds > 0:  # пропуск раунда
+            print(f'{self.get_nickname()} не может использовать оружие!')
+            print('Reason: pass round!')
+            return '', 0
+
         chosen_weapon = self.get_weapon_equipped_lst()[weapon_equipped_index]
         damageType = chosen_weapon.get_damage_type()
         damage = chosen_weapon.get_damage_points()
@@ -357,9 +412,38 @@ class BattleTech():
         if fireSuccessfulFlag:
             return damageType, damage
 
-    # Unique abilities methods
-    def activateUniqueAbility(self):
+    def get_superabilityotherRequirementsAccepted(self):
+        """
+        reapplied for every type of BattleTech individually!
+        If all other requirements (except superabilityToUseNum) are met - returns True.
+        This method's result is gonna use as argument for activateUniqueAbility-method
+        To let BT use unique ability...
+        """
         pass
+
+
+    # Unique abilities methods
+    def activateUniqueAbility(self, superabilityotherRequirementsAccepted: bool=False):
+        passRounds = self.get_inactiveRounds()
+        superabilityToUseNum = self.get_superabilityToUseNum()
+        nickName = self.get_nickname()
+        if passRounds > 0:  # пропуск раунда
+            print(f'{nickName} не может использовать уникальную способность!')
+            print('Reason: pass round!')
+            return False
+        elif superabilityToUseNum < 1:
+            print(f'{nickName} не может использовать уникальную способность!')
+            print('Reason: already used it!')
+            return False
+        elif (superabilityToUseNum > 0
+              and superabilityotherRequirementsAccepted):
+            print(f'{nickName} использует уникальную способность!')
+            self.__superabilityToUseNum -= 1
+            return True
+        else:
+            print(f'{nickName} не может использовать уникальную способность!')
+            print('Reason: other requirements didnt accepted!')
+            return False
 
     # получение урона
     # Stamina

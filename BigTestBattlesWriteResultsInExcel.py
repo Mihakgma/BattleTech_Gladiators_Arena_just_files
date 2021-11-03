@@ -17,7 +17,7 @@ def allBTduelsXtimes(
         battleIterationsPerBTPair: int=100
 ):
     """"
-    excelFileName with out results: str='_roundsPerPair_uniqueRobotsNum.xlsx'
+    returns df with battle results
     """
     BTuniqueSet = set()
 
@@ -68,6 +68,14 @@ def allBTduelsXtimes(
         BT2MisslesBefore = BTnumTwo.get_missles_num()
         BT1BulletsBefore = BTnumOne.get_bullets_num()
         BT2BulletsBefore = BTnumTwo.get_bullets_num()
+        BT1SpeedBefore = BTnumOne.get_speed()
+        BT2SpeedBefore = BTnumTwo.get_speed()
+        #BT1inactiveRoundsBefore = BTnumOne.get_inactiveRounds()
+        #BT2inactiveRoundsBefore = BTnumTwo.get_inactiveRounds()
+        #BT1isVisibleNowBefore = BTnumOne.get_isVisibleNow()
+        #BT2isVisibleNowBefore = BTnumTwo.get_isVisibleNow()
+        #BT1superabilityToUseNumBefore = BTnumOne.get_superabilityToUseNum()
+        #BT2superabilityToUseNumBefore = BTnumTwo.get_superabilityToUseNum()
         battletLst = [
             BT1nick,
             BT2nick,
@@ -87,15 +95,19 @@ def allBTduelsXtimes(
                 stamina_capacity=BT1StaminaBefore,
                 energy_capacity=BT1EnergyBefore,
                 missles_num=BT1MisslesBefore,
-                bullets_num=BT1BulletsBefore
+                bullets_num=BT1BulletsBefore,
+                speed=BT1SpeedBefore
             )
             BTnumTwo.refreshStats(
                 armor_volume=BT2ArmorBefore,
                 stamina_capacity=BT2StaminaBefore,
                 energy_capacity=BT2EnergyBefore,
                 missles_num=BT2MisslesBefore,
-                bullets_num=BT2BulletsBefore
+                bullets_num=BT2BulletsBefore,
+                speed=BT2SpeedBefore
             )
+            # формируем новую строку ДФ, состоящий из некоторых характеристик
+            # БатлТехов перед и после дуэли!
             dfResults.loc[counterBattleNum] = battletLst + currBattleResultsLst
 
     return dfResults
