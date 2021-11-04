@@ -63,3 +63,35 @@ class Shadow(BattleTech):
         if weapon_slots_num < len(weapon_equipped_lst):
             print('ВНИМАНИЕ!!!')
             print('Длина списка орудий больше количества слотов данного типа')
+
+    def superAbilityOtherRequirementsAccepted(self):
+        """
+        reapplied for every type of BattleTech individually!
+        If all other requirements (except superabilityToUseNum) are met - returns True.
+        This method's result is gonna use as argument for activateUniqueAbility-method
+        To let BT use unique ability...
+
+        Has a 'HYPERJUMP' UNIQUE ability - needs 23 energy and 199 stamina:
+
+           (a couple of rounds enemy cant hit him with any kind of weapon.
+           while SHADOW can use any kind of ordinar weapon - lasers, blasters, machinegun etc...
+           during this regenerates 50% of the original - starting energy capacity
+           regenerates 70% of lost stamina capacity
+           on a last round of it - hits enemy with a shock -
+           70% probability of enemy move skipping during 3 next rounds
+           and 75% probability to fix 1 item of weapon and 1 item of armor slot of SHADOW)
+        """
+
+        energyNow = self.get_energy_capacity()
+        staminaNow = self.get_stamina_capacity()
+        energyBorder = 23
+        staminaBorder = 199
+
+        if energyNow >= energyBorder and staminaNow >= staminaBorder:
+            print('Unique ability requirements are complied!')
+            return True
+        else:
+            print('Unique ability requirements has not met: ')
+            print(f'need energy: {energyBorder}, current energy level: {energyNow}')
+            print(f'need stamina: {staminaBorder}, current stamina level: {staminaNow}')
+            return False

@@ -32,7 +32,7 @@ class BattleTech():
            (need to waste a round to turn it on (only once per battle) -
            insusceptibility to any kind of enemy attack during this round).
 
-           Has a 'GENOCIDE' UNIQUE ability - needs 333 energy and 15 missles:
+           Has a 'GENOCIDE' UNIQUE ability - needs ... energy and ... missiles:
 
            (mass missles single discharge with a huge explosive damage
            enemy which underwent this ability slows down by 59% during 3 next rounds.
@@ -40,7 +40,7 @@ class BattleTech():
            and 75% probability to fix 1 item of weapon and 1 item of armor slot)
 
 
-        2) SHADOW - weak explosive weaponry (missles) and metal armour compensates with a huge
+        2) SHADOW - weak explosive weaponry (missiles) and metal armour compensates with a huge
            amount of energy capacity as well as fast blasters and precise lazers. Very fast.
            Has a fast machineguns with high percent (25%) of critical strike hits upon an armor.
            Lazer and blaster attacks gives 5.5% probability to destroy any kind of enemy
@@ -49,7 +49,7 @@ class BattleTech():
            (need to waste a round to turn it on (only once per battle) -
            insusceptibility to any kind of enemy attack during this round).
 
-           Has a 'HYPERJUMP' UNIQUE ability - needs 555 energy:
+           Has a 'HYPERJUMP' UNIQUE ability - needs ... energy & ... stamina:
 
            (a couple of rounds enemy cant hit him with any kind of weapon.
            while SHADOW can use any kind of ordinar weapon - lasers, blasters, machinegun etc...
@@ -60,8 +60,8 @@ class BattleTech():
            and 75% probability to fix 1 item of weapon and 1 item of armor slot of SHADOW)
 
 
-        3) INFERNO - medium missles force, weak lazers but has machinegun with medium damage.
-           Has a spitfire which ignores metal armor (but quickly destroy it) and penetrates
+        3) INFERNO - medium missiles force, weak lazers but has machinegun with medium damage.
+           Can use a spitfire which ignores metal armor (but quickly destroy it ?) and penetrates
            on 45% through any kind of energy shield.
            Fire attacks gives 3.5% probability to destroy any kind of enemy
            slot item (armor or weapon) despite of enemy using or not energy shield!
@@ -72,7 +72,7 @@ class BattleTech():
            (need to waste a round to turn it on (only once per battle) -
            insusceptibility to any kind of enemy attack during this round).
 
-           Has a 'HELL' UNIQUE ability - needs 432 energy:
+           Has a 'HELL' UNIQUE ability - needs ... energy & ... bullets:
            (
            massive fire attack upon an enemy!
            burns down 35% of remaining energy of enemy tech
@@ -271,7 +271,8 @@ class BattleTech():
     def move(self):
         """
         Передвигает робота (уклонение)
-        эффективно от ракетного залпа
+        эффективно от ракетного залпа и атаки огнеметом,
+        т.к. это медленные типы оружия
         """
         passRounds = self.get_inactiveRounds()
         currentSpeed = self.get_speed()
@@ -412,18 +413,16 @@ class BattleTech():
         if fireSuccessfulFlag:
             return damageType, damage
 
-    def get_superabilityotherRequirementsAccepted(self):
+    def superAbilityOtherRequirementsAccepted(self):
         """
-        reapplied for every type of BattleTech individually!
-        If all other requirements (except superabilityToUseNum) are met - returns True.
-        This method's result is gonna use as argument for activateUniqueAbility-method
-        To let BT use unique ability...
         """
         pass
 
 
     # Unique abilities methods
-    def activateUniqueAbility(self, superabilityotherRequirementsAccepted: bool=False):
+    def activateUniqueAbility(self):
+                              #superabilityotherRequirementsAccepted: bool=False):
+        superAbilityOtherRequirementsAccepted = self.superAbilityOtherRequirementsAccepted()
         passRounds = self.get_inactiveRounds()
         superabilityToUseNum = self.get_superabilityToUseNum()
         nickName = self.get_nickname()
@@ -436,7 +435,7 @@ class BattleTech():
             print('Reason: already used it!')
             return False
         elif (superabilityToUseNum > 0
-              and superabilityotherRequirementsAccepted):
+              and superAbilityOtherRequirementsAccepted):
             print(f'{nickName} использует уникальную способность!')
             self.__superabilityToUseNum -= 1
             return True

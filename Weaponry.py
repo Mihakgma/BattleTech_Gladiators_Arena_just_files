@@ -14,13 +14,15 @@ class Weapon():
                  name,
                  years_old,
                  endurance_volume,
-                 damage_points
+                 damage_points,
+                 activeStatus:int=1
                  ):
         self.__damage_type = damage_type
         self.__name = name
         self.__years_old = years_old
         self.__endurance_volume = endurance_volume
         self.__damage_points = damage_points
+        self.__activeStatus = activeStatus
 
     # задать атрибуты
     def set_damage_type(self, damage_type):
@@ -38,6 +40,9 @@ class Weapon():
     def set_damage_points(self, damage_points):
         self.__damage_points = damage_points
 
+    def set_activeStatus(self, activeStatus):
+        self.__activeStatus = activeStatus
+
     # получить атрибуты
     def get_damage_type(self):
         return self.__damage_type
@@ -54,9 +59,14 @@ class Weapon():
     def get_damage_points(self):
         return self.__damage_points
 
+    def get_activeStatus(self, activeStatus):
+        return self.__activeStatus
+
     def getAllAttributes(self):
+        noYesLst = ['Нет', 'Да']
         print(f'Тип урона: <{self.get_damage_type()}>')
         print(f'Наименование орудия: {self.get_name()}')
         print(f'Возраст(лет): {self.get_years_old()}')
         print(f'Прочность (ед.): {self.get_endurance_volume()}')
         print(f'Наносимый урон(пунктов): {self.get_damage_points()}')
+        print(f'Орудие активно: {noYesLst[self.get_activeStatus()]}')

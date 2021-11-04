@@ -63,3 +63,32 @@ class Gladiator(BattleTech):
         if weapon_slots_num < len(weapon_equipped_lst):
             print('ВНИМАНИЕ!!!')
             print('Длина списка орудий больше количества слотов данного типа')
+
+    def superAbilityOtherRequirementsAccepted(self):
+        """
+        reapplied for every type of BattleTech individually!
+        If all other requirements (except superabilityToUseNum) are met - returns True.
+        This method's result is gonna use as argument for activateUniqueAbility-method
+        To let BT use unique ability...
+
+        Has a 'GENOCIDE' UNIQUE ability - needs 333 energy and 15 missles:
+        (mass missles single discharge with a huge explosive damage
+        enemy which underwent this ability slows down by 59% during 3 next rounds.
+        while this regenerates 35% of armor lost during current battle
+        and 75% probability to fix 1 item of weapon and 1 item of armor slot)
+        """
+
+        energyNow = self.get_energy_capacity()
+        missilesNumNow = self.get_missles_num()
+        energyBorder = 11
+        missilesBorder = 5
+
+        if energyNow >= energyBorder and missilesNumNow >= missilesBorder:
+            print('Unique ability requirements are complied!')
+            return True
+        else:
+            print('Unique ability requirements has not met: ')
+            print(f'need energy: {energyBorder}, current energy level: {energyNow}')
+            print(f'need missiles: {missilesBorder}, current missiles num: {missilesNumNow}')
+            return False
+

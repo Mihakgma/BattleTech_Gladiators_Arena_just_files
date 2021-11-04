@@ -191,6 +191,13 @@ class Battle1vs1():
                   f'ракетного залпа {BTattackerNickname} на скорости {speedBTdefender} км/ч')
             BTdefenderDamageReduction = speedBTdefender * dodgeCoeff
 
+        elif BTdefenderDefenceType == 'move' and BTattackerDamageType == 'thermal':
+            # need get defender's speed
+            speedBTdefender = BTdefender.get_speed()
+            print(f'{BTdefenderNickname} пытается уколниться от '
+                  f'атаки огнеметом {BTattackerNickname} на скорости {speedBTdefender} км/ч')
+            BTdefenderDamageReduction = speedBTdefender * dodgeCoeff
+
         elif BTdefenderDefenceType == 'energy shield' and BTattackerDamageType == 'energetic':
             # successful defence!
             BTdefenderDamageReduction = damagePointsGot * energyShieldEnergeticDamageResistCoeff

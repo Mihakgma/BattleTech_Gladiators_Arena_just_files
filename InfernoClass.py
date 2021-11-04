@@ -63,3 +63,37 @@ class Inferno(BattleTech):
         if weapon_slots_num < len(weapon_equipped_lst):
             print('ВНИМАНИЕ!!!')
             print('Длина списка орудий больше количества слотов данного типа')
+
+
+    def superAbilityOtherRequirementsAccepted(self):
+        """
+        reapplied for every type of BattleTech individually!
+        If all other requirements (except superabilityToUseNum) are met - returns True.
+        This method's result is gonna use as argument for activateUniqueAbility-method
+        To let BT use unique ability...
+
+        Has a 'HELL' UNIQUE ability - needs 33 energy and 10 bullets:
+
+           massive fire attack upon an enemy!
+           burns down 35% of remaining energy of enemy tech
+           and converts it into an armor and stamina explosive damage in 1 to 1 proportion.
+           if during this ability the whole armor of enemy is down
+           so the whole remaining damage hits the enemy stamina.
+           the total amount of damage also returns to INFERNO stamina in 1 to 1 proportion.
+           if INFERNO stamina is full - replenish energy amount in 1 to 1 proportion.
+           this ability with 85% probability destroy 1 item of enemy weapon or armor slot
+        """
+
+        energyNow = self.get_energy_capacity()
+        bulletsNumNow = self.get_bullets_num()
+        energyBorder = 33
+        bulletsBorder = 10
+
+        if energyNow >= energyBorder and bulletsNumNow >= bulletsBorder:
+            print('Unique ability requirements are complied!')
+            return True
+        else:
+            print('Unique ability requirements has not met: ')
+            print(f'need energy: {energyBorder}, current energy level: {energyNow}')
+            print(f'need bullets: {bulletsBorder}, current bullets num: {bulletsNumNow}')
+            return False
