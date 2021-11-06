@@ -18,7 +18,10 @@ class Shadow(BattleTech):
                  weapon_slots_num:int=3,
                  inactiveRounds:int=0,
                  isVisibleNow:int=1,
-                 superabilityToUseNum:int=1):
+                 superabilityToUseNum:int=1,
+                 slowRegenStatus:int=0,
+                 slowRegenToUseNum:int=1,
+                 endedCurrentRound:int=0):
         BattleTech.__init__(self,
                             tech_type,
                             nickname,
@@ -35,7 +38,10 @@ class Shadow(BattleTech):
                             weapon_equipped_lst,
                             inactiveRounds,
                             isVisibleNow,
-                            superabilityToUseNum
+                            superabilityToUseNum,
+                            slowRegenStatus,
+                            slowRegenToUseNum,
+                            endedCurrentRound
                             )
         self.__tech_type = tech_type
         self.__nickname = nickname
@@ -53,6 +59,9 @@ class Shadow(BattleTech):
         self.__inactiveRounds = inactiveRounds
         self.__isVisibleNow = isVisibleNow
         self.__superabilityToUseNum = superabilityToUseNum
+        self.__slowRegenStatus = slowRegenStatus
+        self.__slowRegenToUseNum = slowRegenToUseNum
+        self.__endedCurrentRound = endedCurrentRound
 
         # проверка на соответсвие длины листов брони и орудий
         if armor_slots_num < len(armor_equipped_lst):

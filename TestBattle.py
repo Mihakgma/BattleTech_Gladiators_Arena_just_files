@@ -9,6 +9,11 @@ class Battle1vs1():
     4) manualPiloting()
     5) showBTDetails() - before battle.
     6) applyRoundActions() - apply chosen actions by both BattleTechs.
+
+    attributes:
+    1) BT1, BT2 - objects;
+    2) BT1-, BT2 - regimes (PC, manual);
+    3) number of current round (currentRoundNumber - positive integer)
     """
 
     # инициализация объекта класса
@@ -16,18 +21,23 @@ class Battle1vs1():
                  battleTech1,
                  battleTech2,
                  battleTech1Regime='PC',
-                 battleTech2Regime='PC'
-                 ):
+                 battleTech2Regime='PC',
+                 currentRoundNumber:int=0):
         self.__battleTech1 = battleTech1
         self.__battleTech2 = battleTech2
         self.__battleTech1Regime = battleTech1Regime
         self.__battleTech2Regime = battleTech2Regime
+        self.__currentRoundNumber = currentRoundNumber
 
         # вывести на печать информацию по деталям боя
         self.showBTDetails()
 
     # метод новый раунд
     def startNewRound(self):
+
+        # automatically increment number of current round attribute
+        self.__currentRoundNumber += 1
+
         battleTech1Regime = self.get_battleTech1Regime()
         battleTech2Regime = self.get_battleTech2Regime()
         battleTech1 = self.get_battleTech1()
@@ -275,6 +285,9 @@ class Battle1vs1():
     def set_battleTech2Regime(self, battleTech2Regime):
         self.__battleTech2Regime = battleTech2Regime
 
+    def set_currentRoundNumber(self, currentRoundNumber):
+        self.__currentRoundNumber = currentRoundNumber
+
     # получить атрибуты
     def get_battleTech1(self):
         return self.__battleTech1
@@ -287,3 +300,6 @@ class Battle1vs1():
 
     def get_battleTech2Regime(self):
         return self.__battleTech2Regime
+
+    def get_currentRoundNumber(self):
+        return self.__currentRoundNumber

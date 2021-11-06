@@ -19,7 +19,10 @@ class BattleTech():
                  weapon_equipped_lst,
                  inactiveRounds=0,
                  isVisibleNow=1,
-                 superabilityToUseNum=1
+                 superabilityToUseNum=1,
+                 slowRegenStatus=0,
+                 slowRegenToUseNum=1,
+                 endedCurrentRound=0
                  ):
         """
         TECHTYPES:
@@ -107,6 +110,9 @@ class BattleTech():
         self.__inactiveRounds = inactiveRounds
         self.__isVisibleNow = isVisibleNow
         self.__superabilityToUseNum = superabilityToUseNum
+        self.__slowRegenStatus = slowRegenStatus
+        self.__slowRegenToUseNum = slowRegenToUseNum
+        self.__endedCurrentRound = endedCurrentRound
 
         # проверка на соответсвие длины листов брони и орудий
         if armor_slots_num < len(armor_equipped_lst):
@@ -168,6 +174,15 @@ class BattleTech():
     def set_superabilityToUseNum(self, superabilityToUseNum):
         self.__superabilityToUseNum = superabilityToUseNum
 
+    def set_slowRegenStatus(self, slowRegenStatus):
+        self.__slowRegenStatus = slowRegenStatus
+
+    def set_slowRegenToUseNum(self, slowRegenToUseNum):
+        self.__slowRegenToUseNum = slowRegenToUseNum
+
+    def set_endedCurrentRound(self, endedCurrentRound):
+        self.__endedCurrentRound = endedCurrentRound
+
     def refreshStats(
             self,
             armor_volume,
@@ -178,7 +193,10 @@ class BattleTech():
             speed,
             inactiveRounds=0,
             isVisibleNow=1,
-            superabilityToUseNum=1
+            superabilityToUseNum=1,
+            slowRegenStatus=0,
+            slowRegenToUseNum=1,
+            endedCurrentRound=0
                      ):
         self.__armor_volume = armor_volume
         self.__stamina_capacity = stamina_capacity
@@ -189,6 +207,9 @@ class BattleTech():
         self.__inactiveRounds = inactiveRounds
         self.__isVisibleNow = isVisibleNow
         self.__superabilityToUseNum = superabilityToUseNum
+        self.__slowRegenStatus = slowRegenStatus
+        self.__slowRegenToUseNum = slowRegenToUseNum
+        self.__endedCurrentRound = endedCurrentRound
 
 
     # получить атрибуты
@@ -240,6 +261,15 @@ class BattleTech():
     def get_superabilityToUseNum(self):
         return self.__superabilityToUseNum
 
+    def get_slowRegenStatus(self):
+        return self.__slowRegenStatus
+
+    def get_slowRegenToUseNum(self):
+        return self.__slowRegenToUseNum
+
+    def get_endedCurrentRound(self):
+        return self.__endedCurrentRound
+
     # print all atributes by doing 1 method
     def showAllAttrValues(self):
         """
@@ -248,6 +278,8 @@ class BattleTech():
         BattleTech one
         """
         noYesLst = ['Нет', 'Да']
+        offOnLst = ['Выкл', 'Вкл']
+
         print('Ник: ', self.get_nickname())
         print('Выбранный тип BattleTech: ', self.get_tech_type())
         print('Возраст: ', self.get_years_old(), 'лет')
@@ -263,7 +295,10 @@ class BattleTech():
         print(f'Экипировано оружие: {[i.get_name() for i in self.get_weapon_equipped_lst()]}')
         print(f'BattleTech пропускает ход следующие {self.get_inactiveRounds()} раундов!')
         print(f'Виден противником: {noYesLst[self.get_isVisibleNow()]}')
-        print(f'Может использовать суперспособность {self.get_superabilityToUseNum()} раз')
+        print(f'Может использовать уникальную способность {self.get_superabilityToUseNum()} раз')
+        print(f'Режим медленной регенерации: {offOnLst[self.get_slowRegenStatus()]}')
+        print(f'Может активировать режим медленной регенерации: {self.get_slowRegenToUseNum()} раз')
+        print(f'Закончил текущий раунд: {noYesLst[self.get_endedCurrentRound()]}')
 
 
     # БОЕВКА
@@ -277,9 +312,16 @@ class BattleTech():
         passRounds = self.get_inactiveRounds()
         currentSpeed = self.get_speed()
         currentNickname = self.get_nickname()
+        endedCurrentRound = self.get_endedCurrentRound()
+
         if passRounds > 0: # пропуск раунда
             print(f'{currentNickname} не может стронуться с места!')
             print('Reason: pass round!')
+            self.__inactiveRounds -= 1
+            return False, 'move'
+        elif endedCurrentRound == 1: # уже закончил раунд!
+            print(f'{currentNickname} не может стронуться с места!')
+            print('Reason: already ended this round!')
             return False, 'move'
         elif currentSpeed > 0:
             #print(f'{currentNickname} применяет уклонение на скорости {currentSpeed}')
@@ -297,10 +339,16 @@ class BattleTech():
         может быть применен только если у BattleTech-а осталась энергия
         """
         passRounds = self.get_inactiveRounds()
+        endedCurrentRound = self.get_endedCurrentRound()
 
         if passRounds > 0: # пропуск раунда
             print(f'{self.get_nickname()} не может активировать энергетический щит!')
             print('Reason: pass round!')
+            self.__inactiveRounds -= 1
+            return False, 'energy shield'
+        elif endedCurrentRound == 1: # уже закончил раунд!
+            print(f'{self.get_nickname()} не может активировать энергетический щит!')
+            print('Reason: already ended this round!')
             return False, 'energy shield'
         elif self.get_energy_capacity() > 0:
             #print(f'{self.get_nickname()} активирует энергетический щит!')
@@ -317,9 +365,16 @@ class BattleTech():
         :return:
         """
         passRounds = self.get_inactiveRounds()
+        endedCurrentRound = self.get_endedCurrentRound()
+
         if passRounds > 0: # пропуск раунда
             print(f'{self.get_nickname()} не может активировать физический щит!')
             print('Reason: pass round!')
+            self.__inactiveRounds -= 1
+            return False, 'phisical shield'
+        elif endedCurrentRound == 1: # уже закончил раунд!
+            print(f'{self.get_nickname()} не может активировать физический щит!')
+            print('Reason: already ended this round!')
             return False, 'phisical shield'
         elif self.get_armor_volume() > 0:
             #print(f'{self.get_nickname()} активирует физический щит!')
@@ -338,9 +393,17 @@ class BattleTech():
         """
 
         passRounds = self.get_inactiveRounds()
+        endedCurrentRound = self.get_endedCurrentRound()
+        currentNickname = self.get_nickname()
+
         if passRounds > 0:  # пропуск раунда
-            print(f'{self.get_nickname()} не может использовать оружие!')
+            print(f'{currentNickname} не может использовать оружие!')
             print('Reason: pass round!')
+            self.__inactiveRounds -= 1
+            return '', 0
+        elif endedCurrentRound == 1: # уже закончил раунд!
+            print(f'{currentNickname} не может использовать оружие!')
+            print('Reason: already ended this round!')
             return '', 0
 
         chosen_weapon = self.get_weapon_equipped_lst()[weapon_equipped_index]
@@ -426,9 +489,16 @@ class BattleTech():
         passRounds = self.get_inactiveRounds()
         superabilityToUseNum = self.get_superabilityToUseNum()
         nickName = self.get_nickname()
+        endedCurrentRound = self.get_endedCurrentRound()
+
         if passRounds > 0:  # пропуск раунда
             print(f'{nickName} не может использовать уникальную способность!')
             print('Reason: pass round!')
+            self.__inactiveRounds -= 1
+            return False
+        elif endedCurrentRound == 1:  # уже закончил раунд!
+            print(f'{nickName} не может использовать уникальную способность!')
+            print('Reason: already ended this round!')
             return False
         elif superabilityToUseNum < 1:
             print(f'{nickName} не может использовать уникальную способность!')
@@ -438,11 +508,46 @@ class BattleTech():
               and superAbilityOtherRequirementsAccepted):
             print(f'{nickName} использует уникальную способность!')
             self.__superabilityToUseNum -= 1
+            self.__endedCurrentRound = 1
             return True
         else:
             print(f'{nickName} не может использовать уникальную способность!')
             print('Reason: other requirements didnt accepted!')
             return False
+
+    # activate slow regeneration method
+    def activateSlowRegen(self):
+        """
+        checks if slow regen is possible.
+        if it is possible renew some attributes values:
+        slowRegenStatus = 1
+        slowRegenToUseNum -= 1
+        endedCurrentRound = 1
+        :return: bool
+        """
+        passRounds = self.get_inactiveRounds()
+        nickName = self.get_nickname()
+        slowRegenStatus = self.get_slowRegenStatus()
+        slowRegenToUseNum = self.get_slowRegenToUseNum()
+        endedCurrentRound = self.get_endedCurrentRound()
+
+        if passRounds > 0:  # пропуск раунда
+            print(f'{nickName} не может активировать медленную регенерацию!')
+            print('Reason: pass round!')
+            self.__inactiveRounds -= 1
+            return False
+        elif endedCurrentRound == 1:  # уже закончил раунд!
+            print(f'{nickName} не может использовать уникальную способность!')
+            print('Reason: already ended this round!')
+            return False
+        elif (slowRegenStatus == 0 and
+         slowRegenToUseNum > 0 and
+         endedCurrentRound == 0):
+            print(f'{nickName} активирует медленную регенерацию!')
+            self.__slowRegenStatus = 1
+            self.__slowRegenToUseNum -= 1
+            self.__endedCurrentRound = 1
+            return True
 
     # получение урона
     # Stamina

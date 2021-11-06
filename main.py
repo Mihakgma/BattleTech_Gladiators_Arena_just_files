@@ -33,7 +33,7 @@ def testBattle1(testBTfirst, testBTsecond):
         battleWonBT = 2
 
     battleResultsLst = [
-
+        battleTest1.get_currentRoundNumber(),
         BT1ArmorAfter,
         BT2ArmorAfter,
         BT1StaminaAfter,

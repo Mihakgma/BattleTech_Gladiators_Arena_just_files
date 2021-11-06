@@ -42,6 +42,7 @@ def allBTduelsXtimes(
         'BT2ArmorBefore': [],
         'BT1StaminaBefore': [],
         'BT2StaminaBefore': [],
+        'Total num of Rounds': [],
         'BT1ArmorAfter': [],
         'BT2ArmorAfter': [],
         'BT1StaminaAfter': [],
@@ -70,12 +71,7 @@ def allBTduelsXtimes(
         BT2BulletsBefore = BTnumTwo.get_bullets_num()
         BT1SpeedBefore = BTnumOne.get_speed()
         BT2SpeedBefore = BTnumTwo.get_speed()
-        #BT1inactiveRoundsBefore = BTnumOne.get_inactiveRounds()
-        #BT2inactiveRoundsBefore = BTnumTwo.get_inactiveRounds()
-        #BT1isVisibleNowBefore = BTnumOne.get_isVisibleNow()
-        #BT2isVisibleNowBefore = BTnumTwo.get_isVisibleNow()
-        #BT1superabilityToUseNumBefore = BTnumOne.get_superabilityToUseNum()
-        #BT2superabilityToUseNumBefore = BTnumTwo.get_superabilityToUseNum()
+
         battletLst = [
             BT1nick,
             BT2nick,
