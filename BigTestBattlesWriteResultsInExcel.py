@@ -9,7 +9,9 @@ BTdictToDuel = {
     testBT2: [testBT2.get_nickname()],
     testBT3: [testBT3.get_nickname()],
     testBT4: [testBT4.get_nickname()],
-    testBT5: [testBT5.get_nickname()]
+    testBT5: [testBT5.get_nickname()],
+    testBT6: [testBT6.get_nickname()],
+    testBT7: [testBT7.get_nickname()]
 }
 
 def allBTduelsXtimes(
@@ -42,7 +44,7 @@ def allBTduelsXtimes(
         'BT2ArmorBefore': [],
         'BT1StaminaBefore': [],
         'BT2StaminaBefore': [],
-        'Total num of Rounds': [],
+        'TotalNumberOfRoundsPassed': [],
         'BT1ArmorAfter': [],
         'BT2ArmorAfter': [],
         'BT1StaminaAfter': [],

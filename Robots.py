@@ -46,7 +46,7 @@ class BattleTech():
         2) SHADOW - weak explosive weaponry (missiles) and metal armour compensates with a huge
            amount of energy capacity as well as fast blasters and precise lazers. Very fast.
            Has a fast machineguns with high percent (25%) of critical strike hits upon an armor.
-           Lazer and blaster attacks gives 5.5% probability to destroy any kind of enemy
+           Lazer and blaster attacks gives 5.5% probability to destroy (deactivate) any kind of enemy
            slot item (armor or weapon) despite of enemy using or not energy shield!
            Slow regeneration of energy is available during whole the battle
            (need to waste a round to turn it on (only once per battle) -
@@ -86,6 +86,26 @@ class BattleTech():
            if INFERNO stamina is full - replenish energy amount in 1 to 1 proportion.
            this ability with 85% probability destroy 1 item of enemy weapon or armor slot
            )
+        4) MANTIS - medium BattleTech. Uses lazers and rocket launchers.
+           Has a 'FREEZE' UNIQUE ability - needs 55 energy:
+           ()
+
+        5) WASP - light BattleTech. Very fast, with medium amount of machinegun
+           and lazer ammo (energy). Machinegun with prob 7.9% deactivates enemy slow regeneration.
+           Lazer and blaster attacks gives 3.5% probability to deactivate one weapon item
+           (the one with the most damage points)!
+           Slow regeneration of energy is available during whole the battle
+           (need to waste a round to turn it on (only once per battle) -
+           insusceptibility to any kind of enemy attack during this round).
+
+           Has a 'POISONOUS STING' UNIQUE ability - needs 39 energy & 33 bullets:
+           (
+           add poison to machinegun bullets for the rest of the battle.
+           poison makes additional damage (27% of the basic bullets damage)
+           which ignores armor, phisical or even energy shields
+           )
+
+
            ...
            Length of armor and weapon lists cant be more than
            armor_slots_num and weapon_slots_num accordingly.
@@ -428,6 +448,10 @@ class BattleTech():
                 print(f'И собирается нанести {damage} пунктов <{damageType}> урона!')
 
                 return True
+            elif chosen_weapon.get_activeStatus() == 0:
+                print(f'{currNickname} пытается использовать {currWeapon}!')
+                print('Орудие выведено из строя!')
+                return False
             else:
                 print(f'{currNickname} пытается использовать {currWeapon}!')
                 print('Орудие не сработало!')

@@ -59,7 +59,7 @@ class Weapon():
     def get_damage_points(self):
         return self.__damage_points
 
-    def get_activeStatus(self, activeStatus):
+    def get_activeStatus(self):
         return self.__activeStatus
 
     def getAllAttributes(self):

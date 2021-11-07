@@ -45,19 +45,23 @@ class Battle1vs1():
 
         if battleTech1Regime == 'PC':
             battleTech1AttackDefend = self.simpleAI(battleTech1)
-            battleTech1Attack = battleTech1AttackDefend[0]
-            battleTech1Defence = battleTech1AttackDefend[1]
+
 
         elif battleTech1Regime == 'manual':
-            self.manualPiloting(battleTech1)
+            battleTech1AttackDefend = self.manualPiloting(battleTech1)
+
 
         if battleTech2Regime == 'PC':
             battleTech2AttackDefend = self.simpleAI(battleTech2)
-            battleTech2Attack = battleTech2AttackDefend[0]
-            battleTech2Defence = battleTech2AttackDefend[1]
+
 
         elif battleTech2Regime == 'manual':
-            self.manualPiloting(battleTech2)
+            battleTech2AttackDefend = self.manualPiloting(battleTech2)
+
+        battleTech1Attack = battleTech1AttackDefend[0]
+        battleTech1Defence = battleTech1AttackDefend[1]
+        battleTech2Attack = battleTech2AttackDefend[0]
+        battleTech2Defence = battleTech2AttackDefend[1]
 
         # здесь будет код для типа уклонения у каждого БТ!
         ###
@@ -191,6 +195,7 @@ class Battle1vs1():
         energyShieldEnergeticDamageResistCoeff = 0.83
         energyShieldThermalResistCoeff = 0.55
         physicalResistCoeff = 0.69
+        slowRegenUniqueAbilityResistCoeff = 1
 
         BTdefenderDamageReduction = 0
 
@@ -227,6 +232,20 @@ class Battle1vs1():
             # successful defence!
             BTdefenderDamageReduction = damagePointsGot * physicalResistCoeff
             print(f'{BTdefenderNickname} успешно активировал физический щит '
+                  f'против <{BTattackerDamageType}> атаки {BTattackerNickname}, '
+                  f' снизив урон на {BTdefenderDamageReduction} пунктов!')
+
+        elif BTdefenderDefenceType == 'regen':
+            # defender is activating slow regen!
+            BTdefenderDamageReduction = damagePointsGot * slowRegenUniqueAbilityResistCoeff
+            print(f'{BTdefenderNickname} успешно активировал медленную регенерацию'
+                  f'против <{BTattackerDamageType}> атаки {BTattackerNickname}, '
+                  f' снизив урон на {BTdefenderDamageReduction} пунктов!')
+
+        elif BTdefenderDefenceType == 'unique ability':
+            # defender is activating unique ability !
+            BTdefenderDamageReduction = damagePointsGot * slowRegenUniqueAbilityResistCoeff
+            print(f'{BTdefenderNickname} успешно активировал уникальную способность'
                   f'против <{BTattackerDamageType}> атаки {BTattackerNickname}, '
                   f' снизив урон на {BTdefenderDamageReduction} пунктов!')
 
@@ -270,7 +289,59 @@ class Battle1vs1():
 
     def manualPiloting(self, currentBattleTech):
         # print(f'{currentBattleTech.get_nickname()} управляет пользователь')
-        pass
+        slowRegenUniqueAbilityOrdinarAttackdefenceChoiseDict = {
+            1: [# currentBattleTech.activateSlowRegen()
+                '1 - активировать медленную регенерацию', 'медленная регенерация'],
+            #currentBattleTech.activateUniqueAbility()
+            2: ['2 - активировать уникальную способность', 'уникальная способность'],
+            3: ['3 - обычная атака и защита', 'атака-защита']
+        }
+
+        for key in slowRegenUniqueAbilityOrdinarAttackdefenceChoiseDict:
+            currString = slowRegenUniqueAbilityOrdinarAttackdefenceChoiseDict[key][0]
+            print(currString)
+
+        flag = True
+        while flag:
+            try:
+                actionChoiseKey = int(input('Выберите один из вышепредложенных вариантов'))
+                actionChoisen = slowRegenUniqueAbilityOrdinarAttackdefenceChoiseDict[actionChoiseKey][1]
+                flag = False
+            except:
+                print('Введено ошибочное значение! Пожалуйста, повторите ввод!')
+
+        if actionChoiseKey == 3:
+            weaponList = currentBattleTech.get_weapon_equipped_lst()
+            weaponCounter = 0
+            for weapon in weaponList:
+                weaponCounter += 1
+                weaponName = weapon.get_name()
+                print(f'{weaponCounter} - {weaponName}')
+            choisenWeaponIndex = int(input('Введите индекс орудия для атаки: '))
+            damageChosen = currentBattleTech.use_weapon_by_lst_index(choisenWeaponIndex - 1)
+            #choisenWeaponObj = weaponList[choisenWeaponIndex - 1]
+            print()
+            defenceToChoise = [
+                currentBattleTech.move(),
+                currentBattleTech.activateEnergyShield(),
+                currentBattleTech.activatePhisicalShield()
+            ]
+
+            for defType in ['1 - Уклонение', '2 - Физический Щит', '3 - Энергетический щит']:
+                print(defType)
+            defenceChoisenListIndex = int(input('Выберите один из видов предложенной защиты: '))
+            choisenDefenceObj = defenceToChoise[defenceChoisenListIndex - 1]
+
+            return [damageChosen, choisenDefenceObj]
+        elif actionChoiseKey == 2:
+            pass
+        elif actionChoiseKey == 1:
+            pass
+
+
+
+
+
 
     # задать атрибуты
     def set_battleTech1(self, battleTech1):
