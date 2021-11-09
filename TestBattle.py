@@ -43,6 +43,12 @@ class Battle1vs1():
         battleTech1 = self.get_battleTech1()
         battleTech2 = self.get_battleTech2()
 
+        if battleTech1.get_slowRegenStatus() == 1:
+            battleTech1.slowRegenGetBonus()
+
+        if battleTech2.get_slowRegenStatus() == 1:
+            battleTech2.slowRegenGetBonus()
+
         if battleTech1Regime == 'PC':
             battleTech1AttackDefend = self.simpleAI(battleTech1)
 
@@ -130,9 +136,15 @@ class Battle1vs1():
         else:
             battleTech1.getArmorDamage(battleTech1DamageGot)
 
+        #Обнуляем аттрибут окончил текущий раунд для каждого БаттлТеха
+        battleTech1.__endedCurrentRound = 0
+        battleTech2.__endedCurrentRound = 0
+
         # проверяем стамину роботов и определяем окончен бой или нет?
         battleTech1Stamina = battleTech1.get_stamina_capacity()
         battleTech2Stamina = battleTech2.get_stamina_capacity()
+
+        
         if battleTech1Stamina < 1 or battleTech2Stamina < 1:
 
             battleTech1Info = battleTech1.showAllAttrValues()
@@ -202,14 +214,14 @@ class Battle1vs1():
         if BTdefenderDefenceType == 'move' and BTattackerDamageType == 'explosive':
             # need get defender's speed
             speedBTdefender = BTdefender.get_speed()
-            print(f'{BTdefenderNickname} пытается уколниться от '
+            print(f'{BTdefenderNickname} пытается уклониться от '
                   f'ракетного залпа {BTattackerNickname} на скорости {speedBTdefender} км/ч')
             BTdefenderDamageReduction = speedBTdefender * dodgeCoeff
 
         elif BTdefenderDefenceType == 'move' and BTattackerDamageType == 'thermal':
             # need get defender's speed
             speedBTdefender = BTdefender.get_speed()
-            print(f'{BTdefenderNickname} пытается уколниться от '
+            print(f'{BTdefenderNickname} пытается уклониться от '
                   f'атаки огнеметом {BTattackerNickname} на скорости {speedBTdefender} км/ч')
             BTdefenderDamageReduction = speedBTdefender * dodgeCoeff
 
@@ -235,12 +247,12 @@ class Battle1vs1():
                   f'против <{BTattackerDamageType}> атаки {BTattackerNickname}, '
                   f' снизив урон на {BTdefenderDamageReduction} пунктов!')
 
-        elif BTdefenderDefenceType == 'regen':
+        elif BTdefenderDefenceType == 'invulnerable':
             # defender is activating slow regen!
             BTdefenderDamageReduction = damagePointsGot * slowRegenUniqueAbilityResistCoeff
-            print(f'{BTdefenderNickname} успешно активировал медленную регенерацию'
-                  f'против <{BTattackerDamageType}> атаки {BTattackerNickname}, '
-                  f' снизив урон на {BTdefenderDamageReduction} пунктов!')
+            print(f'{BTdefenderNickname} неуязвим '
+                  f'к <{BTattackerDamageType}> атаке {BTattackerNickname}, '
+                  f' что позволяет ему снизить получаемый урон на {BTdefenderDamageReduction} пунктов!')
 
         elif BTdefenderDefenceType == 'unique ability':
             # defender is activating unique ability !
@@ -301,6 +313,30 @@ class Battle1vs1():
             currString = slowRegenUniqueAbilityOrdinarAttackdefenceChoiseDict[key][0]
             print(currString)
 
+        def usual_attack_defend_actions():
+            weaponList = currentBattleTech.get_weapon_equipped_lst()
+            weaponCounter = 0
+            for weapon in weaponList:
+                weaponCounter += 1
+                weaponName = weapon.get_name()
+                print(f'{weaponCounter} - {weaponName}')
+            choisenWeaponIndex = int(input('Введите индекс орудия для атаки: '))
+            damageChosen = currentBattleTech.use_weapon_by_lst_index(choisenWeaponIndex - 1)
+            # choisenWeaponObj = weaponList[choisenWeaponIndex - 1]
+            print()
+            defenceToChoise = [
+                currentBattleTech.move(),
+                currentBattleTech.activatePhisicalShield(),
+                currentBattleTech.activateEnergyShield()
+            ]
+
+            for defType in ['1 - Уклонение', '2 - Физический Щит', '3 - Энергетический щит']:
+                print(defType)
+            defenceChoisenListIndex = int(input('Выберите один из видов предложенной защиты: '))
+            choisenDefenceObj = defenceToChoise[defenceChoisenListIndex - 1]
+
+            return [damageChosen, choisenDefenceObj]
+
         flag = True
         while flag:
             try:
@@ -311,32 +347,19 @@ class Battle1vs1():
                 print('Введено ошибочное значение! Пожалуйста, повторите ввод!')
 
         if actionChoiseKey == 3:
-            weaponList = currentBattleTech.get_weapon_equipped_lst()
-            weaponCounter = 0
-            for weapon in weaponList:
-                weaponCounter += 1
-                weaponName = weapon.get_name()
-                print(f'{weaponCounter} - {weaponName}')
-            choisenWeaponIndex = int(input('Введите индекс орудия для атаки: '))
-            damageChosen = currentBattleTech.use_weapon_by_lst_index(choisenWeaponIndex - 1)
-            #choisenWeaponObj = weaponList[choisenWeaponIndex - 1]
-            print()
-            defenceToChoise = [
-                currentBattleTech.move(),
-                currentBattleTech.activateEnergyShield(),
-                currentBattleTech.activatePhisicalShield()
-            ]
-
-            for defType in ['1 - Уклонение', '2 - Физический Щит', '3 - Энергетический щит']:
-                print(defType)
-            defenceChoisenListIndex = int(input('Выберите один из видов предложенной защиты: '))
-            choisenDefenceObj = defenceToChoise[defenceChoisenListIndex - 1]
-
-            return [damageChosen, choisenDefenceObj]
+            return usual_attack_defend_actions()
         elif actionChoiseKey == 2:
             pass
         elif actionChoiseKey == 1:
-            pass
+            try:
+                if currentBattleTech.activateSlowRegen():
+                    currentBattleTech.slowRegenGetBonus()
+                    return [('', 0), currentBattleTech.becomeInvulnerable()]
+                else:
+                    return usual_attack_defend_actions()
+
+            except:
+                print('Ошибка! Сломался выбор медленного регена!')
 
 
 

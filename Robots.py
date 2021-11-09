@@ -114,12 +114,15 @@ class BattleTech():
            And the initialization process cant be performed!
 
         """
+        stamina_capacity = round(stamina_capacity, 2)
+        energy_capacity = round(energy_capacity, 2)
+
         self.__tech_type = tech_type
         self.__nickname = nickname
         self.__years_old = years_old
         self.__armor_volume = armor_volume
-        self.__stamina_capacity = round(stamina_capacity, 2)
-        self.__energy_capacity = round(energy_capacity, 2)
+        self.__stamina_capacity = stamina_capacity
+        self.__energy_capacity = energy_capacity
         self.__missles_num = missles_num
         self.__bullets_num = bullets_num
         self.__speed = speed
@@ -133,6 +136,14 @@ class BattleTech():
         self.__slowRegenStatus = slowRegenStatus
         self.__slowRegenToUseNum = slowRegenToUseNum
         self.__endedCurrentRound = endedCurrentRound
+
+        # save baseline attribute levels
+        self.__baseline_armor_volume = armor_volume
+        self.__baseline_stamina_capacity = stamina_capacity
+        self.__baseline_energy_capacity = energy_capacity
+        self.__baseline_missiles_num = missles_num
+        self.__baseline_bullets_num = bullets_num
+        self.__baseline_speed = speed
 
         # проверка на соответсвие длины листов брони и орудий
         if armor_slots_num < len(armor_equipped_lst):
@@ -202,6 +213,7 @@ class BattleTech():
 
     def set_endedCurrentRound(self, endedCurrentRound):
         self.__endedCurrentRound = endedCurrentRound
+
 
     def refreshStats(
             self,
@@ -290,6 +302,26 @@ class BattleTech():
     def get_endedCurrentRound(self):
         return self.__endedCurrentRound
 
+    # get baseline attribute levels
+    def get_baseline_armor_volume(self):
+        return self.__baseline_armor_volume
+
+    def get_baseline_stamina_capacity(self):
+        return self.__baseline_stamina_capacity
+
+    def get_baseline_energy_capacity(self):
+        return self.__baseline_energy_capacity
+
+    def get_baseline_missiles_num(self):
+        return self.__baseline_missiles_num
+
+    def get_baseline_bullets_num(self):
+        return self.__baseline_bullets_num
+
+    def get_baseline_speed(self):
+        return self.__baseline_speed
+
+
     # print all atributes by doing 1 method
     def showAllAttrValues(self):
         """
@@ -350,6 +382,9 @@ class BattleTech():
             print(f'{currentNickname} не может стронуться с места!')
             print('Reason: Not enough speed!')
             return False, 'move'
+
+    def becomeInvulnerable(self):
+        return True, 'invulnerable'
 
 
     def activateEnergyShield(self):
@@ -532,7 +567,7 @@ class BattleTech():
               and superAbilityOtherRequirementsAccepted):
             print(f'{nickName} использует уникальную способность!')
             self.__superabilityToUseNum -= 1
-            self.__endedCurrentRound = 1
+            #self.__endedCurrentRound = 1
             return True
         else:
             print(f'{nickName} не может использовать уникальную способность!')
@@ -561,7 +596,7 @@ class BattleTech():
             self.__inactiveRounds -= 1
             return False
         elif endedCurrentRound == 1:  # уже закончил раунд!
-            print(f'{nickName} не может использовать уникальную способность!')
+            print(f'{nickName} не может активировать медленную регенерацию!')
             print('Reason: already ended this round!')
             return False
         elif (slowRegenStatus == 0 and
@@ -570,8 +605,33 @@ class BattleTech():
             print(f'{nickName} активирует медленную регенерацию!')
             self.__slowRegenStatus = 1
             self.__slowRegenToUseNum -= 1
-            self.__endedCurrentRound = 1
+            #self.__endedCurrentRound = 1
             return True
+
+    def slowRegenGetBonus(self):
+        """"
+        If slow regen is activated (this or one of prev round)
+        BT is getting stamina or armor or energy bonuses!
+
+        ATTENTION!
+        this bonus cannot be greater then current variable baseline value!
+        """
+
+        staminaBonus = 3
+        armorBonus = 5
+        energyBonus = 1
+        nickName = self.get_nickname()
+
+        if self.get_stamina_capacity() + staminaBonus <= self.get_baseline_stamina_capacity():
+            self.__stamina_capacity += staminaBonus
+            print(f'{nickName} успешно восстанавливает {staminaBonus} пунктов стамины!')
+        if self.get_armor_volume() + armorBonus <= self.get_baseline_armor_volume():
+            self.__armor_volume += armorBonus
+            print(f'{nickName} успешно восстанавливает {armorBonus} пунктов брони!')
+        if self.get_energy_capacity() + energyBonus <= self.get_baseline_energy_capacity():
+            self.__energy_capacity += energyBonus
+            print(f'{nickName} успешно восстанавливает {energyBonus} пунктов энергии!')
+
 
     # получение урона
     # Stamina
