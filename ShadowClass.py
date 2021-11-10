@@ -104,3 +104,27 @@ class Shadow(BattleTech):
             print(f'need energy: {energyBorder}, current energy level: {energyNow}')
             print(f'need stamina: {staminaBorder}, current stamina level: {staminaNow}')
             return False
+
+    def slowRegenGetBonus(self):
+        """"
+        If slow regen is activated (this or one of prev round)
+        Shadow BT is getting stamina or armor or energy bonuses!
+
+        ATTENTION!
+        this bonus cannot be greater then current variable (attribute) baseline value!
+        """
+
+        staminaBonus = 7
+        armorBonus = 1
+        energyBonus = 3
+        nickName = self.get_nickname()
+
+        if self.get_stamina_capacity() + staminaBonus <= self.get_baseline_stamina_capacity():
+            self.__stamina_capacity += staminaBonus
+            print(f'{nickName} успешно восстанавливает {staminaBonus} пунктов стамины!')
+        if self.get_armor_volume() + armorBonus <= self.get_baseline_armor_volume():
+            self.__armor_volume += armorBonus
+            print(f'{nickName} успешно восстанавливает {armorBonus} пунктов брони!')
+        if self.get_energy_capacity() + energyBonus <= self.get_baseline_energy_capacity():
+            self.__energy_capacity += energyBonus
+            print(f'{nickName} успешно восстанавливает {energyBonus} пунктов энергии!')

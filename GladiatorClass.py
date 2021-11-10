@@ -101,3 +101,26 @@ class Gladiator(BattleTech):
             print(f'need missiles: {missilesBorder}, current missiles num: {missilesNumNow}')
             return False
 
+    def slowRegenGetBonus(self):
+        """"
+        If slow regen is activated (this or one of prev round)
+        Gladiator BT is getting stamina or missiles or bullets bonuses!
+
+        ATTENTION!
+        this bonus cannot be greater then current variable (attribute) baseline value!
+        """
+
+        staminaBonus = 5
+        missilesBonus = 1
+        bulletsBonus = 1
+        nickName = self.get_nickname()
+
+        if self.get_stamina_capacity() + staminaBonus <= self.get_baseline_stamina_capacity():
+            self.__stamina_capacity += staminaBonus
+            print(f'{nickName} успешно восстанавливает {staminaBonus} пунктов стамины!')
+        if self.get_missles_num() + missilesBonus <= self.get_baseline_missiles_num():
+            self.__missles_num += missilesBonus
+            print(f'{nickName} пополняет боекомплект ракетных орудий на {missilesBonus} ед. !')
+        if self.get_bullets_num() + bulletsBonus <= self.get_baseline_bullets_num():
+            self.__bullets_num += bulletsBonus
+            print(f'{nickName} пополняет боекомплект патронов на {bulletsBonus} ед. !')

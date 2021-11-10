@@ -144,7 +144,7 @@ class Battle1vs1():
         battleTech1Stamina = battleTech1.get_stamina_capacity()
         battleTech2Stamina = battleTech2.get_stamina_capacity()
 
-        
+
         if battleTech1Stamina < 1 or battleTech2Stamina < 1:
 
             battleTech1Info = battleTech1.showAllAttrValues()
@@ -274,13 +274,21 @@ class Battle1vs1():
     def showBTDetails(self):
         battleTech1 = self.get_battleTech1()
         battleTech2 = self.get_battleTech2()
+        battleTech1Regime = self.get_battleTech1Regime()
+        battleTech2Regime = self.get_battleTech2Regime()
+
         print(f'БОЙ {battleTech1.get_nickname()} против {battleTech2.get_nickname()} !')
         # вывести инфу по тому, кто управляет каждым Роботом!
         print()
-        print(f'Режим управления {battleTech1.get_nickname()}: {self.get_battleTech1Regime()}')
-        print(f'Режим управления {battleTech2.get_nickname()}: {self.get_battleTech2Regime()}')
+        print(f'Режим управления {battleTech1.get_nickname()}: {battleTech1Regime}')
+        print(f'Режим управления {battleTech2.get_nickname()}: {battleTech2Regime}')
         print()
         print()
+        if battleTech1Regime == 'PC':
+            battleTech1.set_slowRegenStatus(1)
+        if battleTech2Regime == 'PC':
+            battleTech2.set_slowRegenStatus(1)
+
 
     def simpleAI(self, currentBattleTech: object):
         # print(f'{currentBattleTech.get_nickname()} управляет ИИ')

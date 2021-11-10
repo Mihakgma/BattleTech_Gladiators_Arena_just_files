@@ -614,7 +614,7 @@ class BattleTech():
         BT is getting stamina or armor or energy bonuses!
 
         ATTENTION!
-        this bonus cannot be greater then current variable baseline value!
+        this bonus cannot be greater then current variable (attribute) baseline value!
         """
 
         staminaBonus = 3

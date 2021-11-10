@@ -95,3 +95,27 @@ class Mantis(BattleTech):
             print('Unique ability requirements has not met: ')
             print(f'need energy: {energyBorder}, current energy level: {energyNow}')
             return False
+
+    def slowRegenGetBonus(self):
+        """"
+        If slow regen is activated (this or one of prev round)
+        BT is getting stamina or armor or energy bonuses!
+
+        ATTENTION!
+        this bonus cannot be greater then current variable (attribute) baseline value!
+        """
+
+        staminaBonus = 5
+        missilesBonus = 1
+        energyBonus = 3
+        nickName = self.get_nickname()
+
+        if self.get_stamina_capacity() + staminaBonus <= self.get_baseline_stamina_capacity():
+            self.__stamina_capacity += staminaBonus
+            print(f'{nickName} успешно восстанавливает {staminaBonus} пунктов стамины!')
+        if self.get_missles_num() + missilesBonus <= self.get_baseline_missiles_num():
+            self.__missles_num += missilesBonus
+            print(f'{nickName} пополняет боекомплект ракетных орудий на {missilesBonus} ед. !')
+        if self.get_energy_capacity() + energyBonus <= self.get_baseline_energy_capacity():
+            self.__energy_capacity += energyBonus
+            print(f'{nickName} успешно восстанавливает {energyBonus} пунктов энергии!')
