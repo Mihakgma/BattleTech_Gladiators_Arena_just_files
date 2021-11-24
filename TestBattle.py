@@ -37,6 +37,10 @@ class Battle1vs1():
 
         # automatically increment number of current round attribute
         self.__currentRoundNumber += 1
+        currentRound = self.get_currentRoundNumber()
+        print('     ###     ')
+        print(f'   ROUND № {currentRound}')
+        print('     ###     ')
 
         battleTech1Regime = self.get_battleTech1Regime()
         battleTech2Regime = self.get_battleTech2Regime()

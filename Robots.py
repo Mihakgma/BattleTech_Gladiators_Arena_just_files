@@ -677,6 +677,7 @@ class BattleTech():
         """
         Удалить объект класса (?)
         поражение данного BattleTech-а
+        в бою!
         """
         # del self
         print('BOOM!')
