@@ -73,7 +73,7 @@ class Wasp(BattleTech):
             print('ВНИМАНИЕ!!!')
             print('Длина списка орудий больше количества слотов данного типа')
 
-    def superAbilityOtherRequirementsAccepted(self):
+    def uniqueAbilityOtherRequirementsAccepted(self):
         """
         reapplied for every type of BattleTech individually!
         If all other requirements (except superabilityToUseNum) are met - returns True.

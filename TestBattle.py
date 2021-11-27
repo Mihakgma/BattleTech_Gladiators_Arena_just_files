@@ -1,5 +1,6 @@
 from random import randint as random_randint
 
+
 class Battle1vs1():
     """
     methods:
@@ -144,6 +145,26 @@ class Battle1vs1():
         battleTech1.__endedCurrentRound = 0
         battleTech2.__endedCurrentRound = 0
 
+        #Обновляем показатель пропуска раунда, если он > 0 для каждого БТеха
+
+        def decreaseBTinactiveRoundsNum(BT: object, numToDecrease: int = 1):
+
+            """"
+            Метод уменьшения количества раундов,
+            которые БаттлТех должен пропустить.
+            По умелчанию по окончанию раунда БаттлТех
+            уменьшает этот аттрибут на единицу (1).
+            """
+
+            inactiveRoundsNum = BT.get_inactiveRounds()
+            if inactiveRoundsNum > 0:
+                BT.set_inactiveRounds(inactiveRoundsNum-numToDecrease)
+
+
+        decreaseBTinactiveRoundsNum(battleTech1)
+        decreaseBTinactiveRoundsNum(battleTech2)
+
+
         # проверяем стамину роботов и определяем окончен бой или нет?
         battleTech1Stamina = battleTech1.get_stamina_capacity()
         battleTech2Stamina = battleTech2.get_stamina_capacity()
@@ -172,7 +193,6 @@ class Battle1vs1():
     def get_battleTechDamageReduction(
             self,
             BTdefender: object,
-            #BTattacker: object,
             BTdefenderDefenceType: str,
             BTattackerDamageType: str,
             BTdefenderNickname: str,
@@ -215,7 +235,14 @@ class Battle1vs1():
 
         BTdefenderDamageReduction = 0
 
-        if BTdefenderDefenceType == 'move' and BTattackerDamageType == 'explosive':
+        if BTdefender.get_isVisibleNow() == 0:
+            # defender is invisible this round!
+            BTdefenderDamageReduction = damagePointsGot * slowRegenUniqueAbilityResistCoeff
+            print(f'{BTdefenderNickname} неуязвим (активирован режим невидимости)'
+                  f'к <{BTattackerDamageType}> атаке {BTattackerNickname}, '
+                  f' что позволяет ему снизить получаемый урон на {BTdefenderDamageReduction} пунктов!')
+
+        elif BTdefenderDefenceType == 'move' and BTattackerDamageType == 'explosive':
             # need get defender's speed
             speedBTdefender = BTdefender.get_speed()
             print(f'{BTdefenderNickname} пытается уклониться от '

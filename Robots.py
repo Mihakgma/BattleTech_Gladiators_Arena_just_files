@@ -359,7 +359,7 @@ class BattleTech():
         """
         Передвигает робота (уклонение)
         эффективно от ракетного залпа и атаки огнеметом,
-        т.к. это медленные типы оружия
+        т.к. это "медленные" типы оружия
         """
         passRounds = self.get_inactiveRounds()
         currentSpeed = self.get_speed()
@@ -369,7 +369,7 @@ class BattleTech():
         if passRounds > 0: # пропуск раунда
             print(f'{currentNickname} не может стронуться с места!')
             print('Reason: pass round!')
-            self.__inactiveRounds -= 1
+            #self.__inactiveRounds -= 1
             return False, 'move'
         elif endedCurrentRound == 1: # уже закончил раунд!
             print(f'{currentNickname} не может стронуться с места!')
@@ -399,7 +399,7 @@ class BattleTech():
         if passRounds > 0: # пропуск раунда
             print(f'{self.get_nickname()} не может активировать энергетический щит!')
             print('Reason: pass round!')
-            self.__inactiveRounds -= 1
+            #self.__inactiveRounds -= 1
             return False, 'energy shield'
         elif endedCurrentRound == 1: # уже закончил раунд!
             print(f'{self.get_nickname()} не может активировать энергетический щит!')
@@ -425,7 +425,7 @@ class BattleTech():
         if passRounds > 0: # пропуск раунда
             print(f'{self.get_nickname()} не может активировать физический щит!')
             print('Reason: pass round!')
-            self.__inactiveRounds -= 1
+            #self.__inactiveRounds -= 1
             return False, 'phisical shield'
         elif endedCurrentRound == 1: # уже закончил раунд!
             print(f'{self.get_nickname()} не может активировать физический щит!')
@@ -454,7 +454,7 @@ class BattleTech():
         if passRounds > 0:  # пропуск раунда
             print(f'{currentNickname} не может использовать оружие!')
             print('Reason: pass round!')
-            self.__inactiveRounds -= 1
+            #self.__inactiveRounds -= 1
             return '', 0
         elif endedCurrentRound == 1: # уже закончил раунд!
             print(f'{currentNickname} не может использовать оружие!')
@@ -535,8 +535,17 @@ class BattleTech():
         if fireSuccessfulFlag:
             return damageType, damage
 
-    def superAbilityOtherRequirementsAccepted(self):
+    def uniqueAbilityOtherRequirementsAccepted(self):
         """
+        """
+        pass
+
+    def uniqueAbilityReturnDamage(self):
+        """"
+        This method is goin to return tuple (damageType, damage)
+        where
+            - damageType is str in according with damageTypeLst from WeaponsCharacteristics
+            - damage - is int (i.e. damage points which BT might return to its opponent)
         """
         pass
 
@@ -544,7 +553,7 @@ class BattleTech():
     # Unique abilities methods
     def activateUniqueAbility(self):
                               #superabilityotherRequirementsAccepted: bool=False):
-        superAbilityOtherRequirementsAccepted = self.superAbilityOtherRequirementsAccepted()
+        superAbilityOtherRequirementsAccepted = self.uniqueAbilityOtherRequirementsAccepted()
         passRounds = self.get_inactiveRounds()
         superabilityToUseNum = self.get_superabilityToUseNum()
         nickName = self.get_nickname()
@@ -553,7 +562,7 @@ class BattleTech():
         if passRounds > 0:  # пропуск раунда
             print(f'{nickName} не может использовать уникальную способность!')
             print('Reason: pass round!')
-            self.__inactiveRounds -= 1
+            #self.__inactiveRounds -= 1
             return False
         elif endedCurrentRound == 1:  # уже закончил раунд!
             print(f'{nickName} не может использовать уникальную способность!')
@@ -593,7 +602,7 @@ class BattleTech():
         if passRounds > 0:  # пропуск раунда
             print(f'{nickName} не может активировать медленную регенерацию!')
             print('Reason: pass round!')
-            self.__inactiveRounds -= 1
+            #self.__inactiveRounds -= 1
             return False
         elif endedCurrentRound == 1:  # уже закончил раунд!
             print(f'{nickName} не может активировать медленную регенерацию!')

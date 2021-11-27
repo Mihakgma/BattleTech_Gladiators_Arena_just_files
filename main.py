@@ -9,7 +9,7 @@ def testBattle1(testBTfirst, testBTsecond):
 
 
     roundNum = 0
-    while battleTest1.startNewRound():
+    while battleTest1.startNewRound:
         #print('###')
         #print()
         roundNum += 1
