@@ -160,8 +160,10 @@ class BattleTech():
     def set_nickname(self, nickname):
         self.__nickname = nickname
 
-    def set_tech_type(self, tech_type):
-        self.__tech_type = tech_type
+    # BT type is set in current class instances and defines in initialization process.
+    # cannot be reset after object has been created!
+    #def set_tech_type(self, tech_type):
+    #    self.__tech_type = tech_type
 
     def set_years_old(self, years_old):
         self.__years_old = years_old
@@ -542,12 +544,17 @@ class BattleTech():
 
     def uniqueAbilityReturnDamage(self):
         """"
-        This method is goin to return tuple (damageType, damage)
+        This method is going to return tuple (damageType, damage)
         where
             - damageType is str in according with damageTypeLst from WeaponsCharacteristics
             - damage - is int (i.e. damage points which BT might return to its opponent)
+
+        If this method wasn't overriden in class-descendant so that BT doesn't
+        return (doesn't make) damage during round in which unique ability usage
+        was initiated.
         """
-        pass
+        return '', 0
+
 
 
     # Unique abilities methods

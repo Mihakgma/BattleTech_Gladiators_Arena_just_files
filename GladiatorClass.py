@@ -124,3 +124,8 @@ class Gladiator(BattleTech):
         if self.get_bullets_num() + bulletsBonus <= self.get_baseline_bullets_num():
             self.__bullets_num += bulletsBonus
             print(f'{nickName} пополняет боекомплект патронов на {bulletsBonus} ед. !')
+
+    def uniqueAbilityReturnDamage(self):
+        damageType = 'explosive'
+        damageVolume = 399
+        return damageType, damageVolume

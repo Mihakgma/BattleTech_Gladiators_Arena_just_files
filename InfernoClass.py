@@ -106,3 +106,8 @@ class Inferno(BattleTech):
             print(f'need energy: {energyBorder}, current energy level: {energyNow}')
             print(f'need bullets: {bulletsBorder}, current bullets num: {bulletsNumNow}')
             return False
+
+    def uniqueAbilityReturnDamage(self):
+        damageType = 'thermal'
+        damageVolume = 333
+        return damageType, damageVolume
